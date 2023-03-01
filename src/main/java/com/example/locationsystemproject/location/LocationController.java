@@ -68,9 +68,30 @@ public class LocationController {
     @GetMapping("/showFriends/{id}/")
     public String showFriends(@PathVariable Integer id, Model model) {
         Location location = locationRepository.getReferenceById(id);
+        model.addAttribute("location",location);
         model.addAttribute("readOnlyUsers",userRepository.findAllReadOnlyFriendsOnLocation(location));
         model.addAttribute("adminUsers",userRepository.findAllAdminFriendsOnLocation(location));
         return "showFriends";
+    }
+
+    @GetMapping("/changeAccess/{locationId}/{userId}/")
+    public String changeAccess(@PathVariable Integer locationId, @PathVariable Long userId, Model model) {
+        User user = userRepository.getReferenceById(userId);
+        Location location = locationRepository.getReferenceById(locationId);
+        model.addAttribute("location",location);
+        model.addAttribute("user",user);
+        if (user.getReadOnlyLocations().contains(location)) {
+            model.addAttribute("showAdminLocations",true);
+        } else if (user.getAdminLocations().contains(location)) {
+            model.addAttribute("showReadOnlyLocations",true);
+        }
+        return "changeAccess";
+    }
+
+    @PostMapping("/changeAccess")
+    public String changeAccess(@Valid User user) {
+        userRepository.save(user);
+        return "redirect:/myLocations";
     }
 
     @GetMapping("/shareLocation")

@@ -26,6 +26,7 @@
       <td>${user.name}</td>
       <td>${user.username}</td>
       <td>(Read only access)</td>
+      <td><a href="<c:url value="/changeAccess/${location.id}/${user.id}/"/>">Change access</a></td>
     </tr>
   </c:forEach>
   <c:forEach items="${adminUsers}" var="user">
@@ -33,6 +34,7 @@
       <td>${user.name}</td>
       <td>${user.username}</td>
       <td>(Admin access)</td>
+      <td><a href="<c:url value="/changeAccess/${location.id}/${user.id}/"/>">Change access</a></td>
     </tr>
   </c:forEach>
   </tbody>
