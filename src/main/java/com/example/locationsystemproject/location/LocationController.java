@@ -65,6 +65,14 @@ public class LocationController {
         return "myLocations";
     }
 
+    @GetMapping("/showFriends/{id}/")
+    public String showFriends(@PathVariable Integer id, Model model) {
+        Location location = locationRepository.getReferenceById(id);
+        model.addAttribute("readOnlyUsers",userRepository.findAllReadOnlyFriendsOnLocation(location));
+        model.addAttribute("adminUsers",userRepository.findAllAdminFriendsOnLocation(location));
+        return "showFriends";
+    }
+
     @GetMapping("/shareLocation")
     public String shareLocation(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
         User entityUser = currentUser.getUser();
