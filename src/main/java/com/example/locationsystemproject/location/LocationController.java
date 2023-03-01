@@ -57,4 +57,11 @@ public class LocationController {
         return "myLocations";
     }
 
+    @GetMapping("/shareLocation")
+    public String shareLocation(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
+        User entityUser = currentUser.getUser();
+        model.addAttribute("users",userRepository.findAllWhereIdNotLike(entityUser.getId()));
+        return "shareLocation";
+    }
+
 }
