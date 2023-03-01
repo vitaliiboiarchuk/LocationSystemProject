@@ -91,4 +91,23 @@ public class LocationController {
         return "redirect:/";
     }
 
+    @GetMapping("/shareAdmin/{id}/")
+    public String shareAdmin(@AuthenticationPrincipal CurrentUser currentUser, @PathVariable long id, Model model) {
+        User entityUser = currentUser.getUser();
+        User user = userRepository.getReferenceById(id);
+        model.addAttribute("user",user);
+        List<Location> allMyLocations = locationRepository.findAllMyLocations(entityUser.getId());
+        List<Location> allMyAdminLocations = locationRepository.findAllMyAdminLocations(entityUser.getId());
+        List<Location> locations = Stream.of(allMyLocations, allMyAdminLocations).flatMap(Collection::stream).collect(Collectors.toList());
+        locations.removeIf(location -> user.getAdminLocations().contains(location) || user.getReadOnlyLocations().contains(location) || location.getUser().equals(user));
+        model.addAttribute("locations",locations);
+        return "shareAdmin";
+    }
+
+    @PostMapping("/shareAdmin")
+    public String shareAdmin(@Valid User user) {
+        userRepository.save(user);
+        return "redirect:/";
+    }
+
 }
