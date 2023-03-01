@@ -13,4 +13,10 @@ public interface LocationRepository extends JpaRepository<Location, Integer> {
     @Query("select l from Location l where l.user.id = ?1")
     List<Location> findAllMyLocations(Long id);
 
+    @Query("select u.readOnlyLocations from User u where u.id = ?1")
+    List<Location> findAllMyReadOnlyLocations(Long id);
+
+    @Query("select u.adminLocations from User u where u.id = ?1")
+    List<Location> findAllMyAdminLocations(Long id);
+
 }
