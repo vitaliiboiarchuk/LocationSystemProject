@@ -27,18 +27,18 @@ public class UserController {
         User userExists = userService.findByUserName(user.getUsername());
         if (userExists != null) {
             bindingResult.rejectValue("username", "error.user",
-                    "Użytkownik z taką nazwą już istnieje");
+                    "A user with that name already exists!");
         }
 
         if (user.getName().isEmpty()) {
-            bindingResult.rejectValue("name","error.user","Pole nie może być puste!");
+            bindingResult.rejectValue("name","error.user","Field cannot be empty!");
         }
 
         if (user.getUsername().isEmpty()) {
-            bindingResult.rejectValue("email","error.user","Pole nie może być puste!");
+            bindingResult.rejectValue("email","error.user","Field cannot be empty!");
         }
         if (user.getPassword().isEmpty()) {
-            bindingResult.rejectValue("password","error.user","Pole nie może być puste!");
+            bindingResult.rejectValue("password","error.user","Field cannot be empty!");
         }
 
         if (bindingResult.hasErrors()) {
