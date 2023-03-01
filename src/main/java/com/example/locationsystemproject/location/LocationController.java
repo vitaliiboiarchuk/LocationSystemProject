@@ -60,6 +60,8 @@ public class LocationController {
     public String myLocations(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
         User entityUser = currentUser.getUser();
         model.addAttribute("locations",locationRepository.findAllMyLocations(entityUser.getId()));
+        model.addAttribute("readOnlyLocations",locationRepository.findAllMyReadOnlyLocations(entityUser.getId()));
+        model.addAttribute("adminLocations",locationRepository.findAllMyAdminLocations(entityUser.getId()));
         return "myLocations";
     }
 
