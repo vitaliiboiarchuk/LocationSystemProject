@@ -1,4 +1,5 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: boyar
@@ -12,22 +13,27 @@
     <title>Title</title>
 </head>
 <body>
-<form:form method="post" modelAttribute="user" action="/shareAdmin">
+<c:if test="${notAvailable}">
+    <h3>User already have all your locations</h3>
+</c:if>
+<c:if test="${available}">
+    <form:form method="post" modelAttribute="user" action="/shareAdmin">
 
-  <form:hidden path="id"/>
-  <form:hidden path="enabled"/>
-  <form:hidden path="name"/>
-  <form:hidden path="username"/>
-  <form:hidden path="password"/>
-  <form:hidden path="roles"/>
+        <form:hidden path="id"/>
+        <form:hidden path="enabled"/>
+        <form:hidden path="name"/>
+        <form:hidden path="username"/>
+        <form:hidden path="password"/>
+        <form:hidden path="roles"/>
 
-  <h3>Choose location that you want to share</h3>
+        <h3>Choose location that you want to share</h3>
 
-  <form:checkboxes path="adminLocations" items="${locations}"
-                   itemValue="id" itemLabel="name"/>
+        <form:checkboxes path="adminLocations" items="${locations}"
+                         itemValue="id" itemLabel="name"/>
 
-  <input type="submit" value="Submit"></input>
+        <input type="submit" value="Submit"></input>
 
-</form:form>
+    </form:form>
+</c:if>
 </body>
 </html>

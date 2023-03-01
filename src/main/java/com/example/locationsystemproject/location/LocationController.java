@@ -81,7 +81,12 @@ public class LocationController {
         List<Location> allMyAdminLocations = locationRepository.findAllMyAdminLocations(entityUser.getId());
         List<Location> locations = Stream.of(allMyLocations, allMyAdminLocations).flatMap(Collection::stream).collect(Collectors.toList());
         locations.removeIf(location -> user.getAdminLocations().contains(location) || user.getReadOnlyLocations().contains(location) || location.getUser().equals(user));
-        model.addAttribute("locations",locations);
+        if (locations.isEmpty()) {
+            model.addAttribute("notAvailable",true);
+        } else {
+            model.addAttribute("available",true);
+            model.addAttribute("locations", locations);
+        }
         return "shareReadOnly";
     }
 
@@ -100,7 +105,12 @@ public class LocationController {
         List<Location> allMyAdminLocations = locationRepository.findAllMyAdminLocations(entityUser.getId());
         List<Location> locations = Stream.of(allMyLocations, allMyAdminLocations).flatMap(Collection::stream).collect(Collectors.toList());
         locations.removeIf(location -> user.getAdminLocations().contains(location) || user.getReadOnlyLocations().contains(location) || location.getUser().equals(user));
-        model.addAttribute("locations",locations);
+        if (locations.isEmpty()) {
+            model.addAttribute("notAvailable",true);
+        } else {
+            model.addAttribute("available",true);
+            model.addAttribute("locations", locations);
+        }
         return "shareAdmin";
     }
 
