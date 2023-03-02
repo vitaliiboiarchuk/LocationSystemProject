@@ -16,10 +16,10 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 class LocationControllerTest extends Specification {
 
     @Autowired
-    MockMvc mockMvc;
+    MockMvc mockMvc
 
     @InjectMocks
-    LocationController locationController;
+    LocationController locationController
 
     void setup() {
         mockMvc = standaloneSetup(locationController).build()

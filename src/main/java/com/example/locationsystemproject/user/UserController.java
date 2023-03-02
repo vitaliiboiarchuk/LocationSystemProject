@@ -19,11 +19,11 @@ public class UserController {
     @GetMapping("/registration")
     public String registration(Model model) {
         model.addAttribute("user",new User());
-        return "registration";
+        return "entrance/registration";
     }
 
     @PostMapping("/registration")
-    public String registrationPost(@Valid User user, BindingResult bindingResult, Model model) {
+    public String registrationPost(@Valid User user, BindingResult bindingResult) {
         User userExists = userService.findByUserName(user.getUsername());
         if (userExists != null) {
             bindingResult.rejectValue("username", "error.user",
@@ -42,7 +42,7 @@ public class UserController {
         }
 
         if (bindingResult.hasErrors()) {
-            return "registration";
+            return "entrance/registration";
         } else {
             userService.saveUser(user);
             return "redirect:/login";
@@ -52,6 +52,6 @@ public class UserController {
     @GetMapping("/login")
     public String login(@Valid User user, Model model) {
         model.addAttribute("user",user);
-        return "login";
+        return "entrance/login";
     }
 }
