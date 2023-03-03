@@ -1,6 +1,5 @@
 package com.example.locationsystemproject.user
 
-import com.example.locationsystemproject.location.Location
 import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
@@ -20,7 +19,6 @@ class UserRepositoryTest extends Specification {
 
     def user = new User()
 
-    
     void setup() {
         user.setUsername("test@gmail.com")
         user.setId(15L)
@@ -36,5 +34,18 @@ class UserRepositoryTest extends Specification {
 
         then: "comparing expected with actual"
         user.getUsername() == result.getUsername()
+    }
+
+    def "should find all users where id not like specified"() {
+        given: "set the data for method testing"
+        long notExpectedId = 11L
+
+        when: "calling the testing method"
+        List<User> result = userRepository.findAllWhereIdNotLike(notExpectedId)
+
+        then: "comparing expected with actual"
+        for (User user : result) {
+            user.getId() != notExpectedId
+        }
     }
 }
