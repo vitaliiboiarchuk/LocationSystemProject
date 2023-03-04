@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 
 @Entity
@@ -23,6 +25,7 @@ public class Location {
     @NotBlank
     private String address;
 
+    @NotFound(action = NotFoundAction. IGNORE)
     @ManyToOne
     private User user;
 }

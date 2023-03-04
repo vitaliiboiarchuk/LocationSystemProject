@@ -19,40 +19,41 @@ class LocationRepositoryTest extends Specification {
     LocationRepository locationRepository
 
     def location = new Location()
+
     def user = new User()
 
-    def user2 = new User()
     def accessLocation = new Location()
+
     List<Location> accessLocations = new ArrayList<>()
 
-    void setup() {
-        user.setUsername("test")
-        user.setPassword("test")
-        user.setName("test")
-        user.setEnabled(1)
+    def user2 = new User()
 
-        user2.setName("test")
-        user2.setEnabled(1)
-        user2.setPassword("test")
-        user2.setUsername("grgrgrg@gmail.com")
-        testEntityManager.merge(user2)
+    void setup() {
+        user.setId(1L)
+        user.setUsername("test@gmail.com")
+        user.setPassword("test")
+        user.setEnabled(1)
+        testEntityManager.merge(user)
 
         location.setName("test")
         location.setAddress("test")
-
-        accessLocation.setName("test")
-        accessLocation.setAddress("test")
-
-    }
-
-
-    def "should find all locations that user added"() {
-        given: "set the data for method testing"
-        user.setId(1L)
-        testEntityManager.merge(user)
         location.setUser(user)
         testEntityManager.merge(location)
 
+        accessLocation.setName("accessTest")
+        accessLocation.setAddress("accessTest")
+        accessLocation.setUser(user)
+        testEntityManager.persistAndFlush(accessLocation)
+
+        accessLocations.add(accessLocation)
+
+        user2.setId(2L)
+        user2.setUsername("test2")
+        user2.setPassword("test")
+        user2.setEnabled(1)
+    }
+
+    def "should find all locations that user added"() {
         when: "calling the testing method"
         List<Location> result = locationRepository.findAllMyLocations(location.user.getId())
 
@@ -64,12 +65,8 @@ class LocationRepositoryTest extends Specification {
 
     def "should find all locations with read only access that user has"() {
         given: "set the data for method testing"
-        user.setId(2L)
-        testEntityManager.merge(user)
-        accessLocation.setUser(user)
-        testEntityManager.merge(accessLocation)
-        accessLocations.add(accessLocation)
         user2.setReadOnlyLocations(accessLocations)
+        testEntityManager.merge(user2)
 
         when: "calling the testing method"
         List<Location> result = locationRepository.findAllMyReadOnlyLocations(user2.getId())
@@ -82,12 +79,8 @@ class LocationRepositoryTest extends Specification {
 
     def "should find all locations with admin access that user has"() {
         given: "set the data for method testing"
-        user.setId(3L)
-        testEntityManager.merge(user)
-        accessLocation.setUser(user)
-        testEntityManager.merge(accessLocation)
-        accessLocations.add(accessLocation)
         user2.setAdminLocations(accessLocations)
+        testEntityManager.merge(user2)
 
         when: "calling the testing method"
         List<Location> result = locationRepository.findAllMyAdminLocations(user2.getId())
