@@ -22,11 +22,8 @@ class LocationRepositoryTest extends Specification {
     def user = new User()
 
     def user2 = new User()
-    def readOnlyLocation = new Location()
-    List<Location> readOnlyLocations = new ArrayList<>()
-
-    def adminLocation = new Location()
-    List<Location> adminLocations = new ArrayList<>()
+    def accessLocation = new Location()
+    List<Location> accessLocations = new ArrayList<>()
 
     void setup() {
         user.setUsername("test")
@@ -43,11 +40,9 @@ class LocationRepositoryTest extends Specification {
         location.setName("test")
         location.setAddress("test")
 
-        readOnlyLocation.setName("test")
-        readOnlyLocation.setAddress("test")
+        accessLocation.setName("test")
+        accessLocation.setAddress("test")
 
-        adminLocation.setName("test")
-        adminLocation.setAddress("test")
     }
 
 
@@ -71,17 +66,17 @@ class LocationRepositoryTest extends Specification {
         given: "set the data for method testing"
         user.setId(2L)
         testEntityManager.merge(user)
-        readOnlyLocation.setUser(user)
-        testEntityManager.merge(readOnlyLocation)
-        readOnlyLocations.add(readOnlyLocation)
-        user2.setReadOnlyLocations(readOnlyLocations)
+        accessLocation.setUser(user)
+        testEntityManager.merge(accessLocation)
+        accessLocations.add(accessLocation)
+        user2.setReadOnlyLocations(accessLocations)
 
         when: "calling the testing method"
         List<Location> result = locationRepository.findAllMyReadOnlyLocations(user2.getId())
 
         then: "comparing expected with actual"
         for (Location loc : result) {
-            loc == readOnlyLocation
+            loc == accessLocation
         }
     }
 
@@ -89,17 +84,17 @@ class LocationRepositoryTest extends Specification {
         given: "set the data for method testing"
         user.setId(3L)
         testEntityManager.merge(user)
-        adminLocation.setUser(user)
-        testEntityManager.merge(adminLocation)
-        adminLocations.add(adminLocation)
-        user2.setAdminLocations(adminLocations)
+        accessLocation.setUser(user)
+        testEntityManager.merge(accessLocation)
+        accessLocations.add(accessLocation)
+        user2.setAdminLocations(accessLocations)
 
         when: "calling the testing method"
         List<Location> result = locationRepository.findAllMyAdminLocations(user2.getId())
 
         then: "comparing expected with actual"
         for (Location loc : result) {
-            loc == adminLocation
+            loc == accessLocation
         }
     }
 }
