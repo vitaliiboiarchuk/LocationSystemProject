@@ -41,6 +41,6 @@ class UserServiceTest extends Specification {
         User user = userService.findByUserName("boyarchuk.vitaliy@gmail.com")
 
         then: "comparing expected with actual"
-        user.getUsername() == "boyarchuk.vitaliy@gmail.com"
+        user.getUsername() == user1.getUsername()
     }
 }
