@@ -119,6 +119,7 @@ class LocationControllerTest extends Specification {
         expect: "status 200 and update user after change access"
         mockMvc.perform(post("/changeAccess"))
                 .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/myLocations"))
     }
 
     @WithMockUser
@@ -126,6 +127,7 @@ class LocationControllerTest extends Specification {
         expect: "status 200 and give user a read only access after share location with him"
         mockMvc.perform(post("/shareReadOnly"))
                 .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"))
     }
 
     @WithMockUser
@@ -133,6 +135,7 @@ class LocationControllerTest extends Specification {
         expect: "status 200 and give user an admin access after share location with him"
         mockMvc.perform(post("/shareAdmin"))
                 .andExpect(status().is3xxRedirection())
+                .andExpect(view().name("redirect:/"))
     }
 
 
