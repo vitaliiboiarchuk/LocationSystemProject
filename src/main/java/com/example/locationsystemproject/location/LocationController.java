@@ -42,7 +42,7 @@ public class LocationController {
         User entityUser = currentUser.getUser();
         model.addAttribute("user", userRepository.getReferenceById(entityUser.getId()));
         model.addAttribute("location", new Location());
-        return "addLocation";
+        return "locOperations/addLocation";
     }
 
     @PostMapping("/addLocation")
@@ -50,7 +50,7 @@ public class LocationController {
         User entityUser = currentUser.getUser();
         if (result.hasErrors()) {
             model.addAttribute("user", userRepository.getReferenceById(entityUser.getId()));
-            return "addLocation";
+            return "locOperations/addLocation";
         }
         locationRepository.save(location);
         return "redirect:/";
@@ -62,7 +62,7 @@ public class LocationController {
         model.addAttribute("locations",locationRepository.findAllMyLocations(entityUser.getId()));
         model.addAttribute("readOnlyLocations",locationRepository.findAllMyReadOnlyLocations(entityUser.getId()));
         model.addAttribute("adminLocations",locationRepository.findAllMyAdminLocations(entityUser.getId()));
-        return "myLocations";
+        return "locOperations/myLocations";
     }
 
     @GetMapping("/showFriends/{id}/")
@@ -71,7 +71,7 @@ public class LocationController {
         model.addAttribute("location",location);
         model.addAttribute("readOnlyUsers",userRepository.findAllReadOnlyFriendsOnLocation(location));
         model.addAttribute("adminUsers",userRepository.findAllAdminFriendsOnLocation(location));
-        return "showFriends";
+        return "locOperations/showFriends";
     }
 
     @GetMapping("/changeAccess/{locationId}/{userId}/")
@@ -85,7 +85,7 @@ public class LocationController {
         } else if (user.getAdminLocations().contains(location)) {
             model.addAttribute("showReadOnlyLocations",true);
         }
-        return "changeAccess";
+        return "locOperations/changeAccess";
     }
 
     @PostMapping("/changeAccess")
@@ -98,7 +98,7 @@ public class LocationController {
     public String shareLocation(@AuthenticationPrincipal CurrentUser currentUser, Model model) {
         User entityUser = currentUser.getUser();
         model.addAttribute("users",userRepository.findAllWhereIdNotLike(entityUser.getId()));
-        return "shareLocation";
+        return "locOperations/shareLocation";
     }
 
     @GetMapping("/shareReadOnly/{id}/")
@@ -116,7 +116,7 @@ public class LocationController {
             model.addAttribute("available",true);
             model.addAttribute("locations", locations);
         }
-        return "shareReadOnly";
+        return "locOperations/shareReadOnly";
     }
 
     @PostMapping("/shareReadOnly")
@@ -140,7 +140,7 @@ public class LocationController {
             model.addAttribute("available",true);
             model.addAttribute("locations", locations);
         }
-        return "shareAdmin";
+        return "locOperations/shareAdmin";
     }
 
     @PostMapping("/shareAdmin")
